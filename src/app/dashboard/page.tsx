@@ -1,6 +1,6 @@
 'use client';
 import React from 'react';
-import { FiActivity, FiCalendar, FiFilter, FiPieChart, FiPlusCircle, FiSearch, FiShoppingCart, FiUsers, FiAlertCircle } from 'react-icons/fi';
+import { FiCalendar, FiFilter, FiPieChart, FiPlusCircle, FiSearch, FiShoppingCart, FiUsers, FiAlertCircle } from 'react-icons/fi';
 import Image from 'next/image';
 
 export default function HomePage() {
