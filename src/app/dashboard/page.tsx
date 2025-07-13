@@ -197,7 +197,7 @@ export default function HomePage() {
                 { name: "أوميبرازول", orders: 35, image: "/images.png" },
                 { name: "أموكسيسيلين", orders: 28, image: "/images.png" },
                 { name: "إيبوبروفين", orders: 25, image: "/images.png" },
-                { name: "فيتامين د", orders: 20, image: "/images-d.png" },
+                { name: "فيتامين د", orders: 20, image: "/images.png" },
               ].map((medicine, index) => (
                 <div key={index} className="flex items-center gap-3 p-2 hover:bg-gray-50 rounded-lg transition-colors">
                   <div className="relative w-10 h-10">
