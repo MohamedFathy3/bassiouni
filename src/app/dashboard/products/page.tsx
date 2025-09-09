@@ -2,6 +2,7 @@
 import { useState } from 'react'
 import { FiSearch, FiPlus, FiEdit, FiTrash2, FiImage, FiFilter } from 'react-icons/fi'
 import Image from 'next/image'
+
 interface Product {
   id: number
   name: string
@@ -13,6 +14,7 @@ interface Product {
   quantity: number
   price: number
   images: string[]
+  warehouse: string
 }
 
 const sampleProducts: Product[] = [
@@ -26,7 +28,8 @@ const sampleProducts: Product[] = [
     concentration: '500 مجم',
     quantity: 120,
     price: 15,
-    images: ['panadol1.jpg', 'panadol2.jpg']
+    images: ['panadol1.jpg', 'panadol2.jpg'],
+    warehouse: 'مخزن القاهرة'
   },
   {
     id: 2,
@@ -38,13 +41,15 @@ const sampleProducts: Product[] = [
     concentration: '1000 مجم',
     quantity: 85,
     price: 30,
-    images: ['vitamin-c.jpg']
+    images: ['vitamin-c.jpg'],
+    warehouse: 'مخزن الإسكندرية'
   }
 ]
 
 const categories = ['مسكنات', 'فيتامينات', 'مضادات حيوية', 'أدوية سكري', 'مستحضرات جلدية']
 const brands = ['جلاكسو سميث كلاين', 'نوفارتس', 'فايزر', 'سانوفي', 'ناتورال']
 const dosages = ['أقراص', 'شراب', 'حقن', 'كريم', 'مرهم', 'أقراص فوارة']
+const warehouses = ['مخزن القاهرة', 'مخزن الإسكندرية', 'مخزن أسيوط']
 
 export default function ProductsPage() {
   const [products, setProducts] = useState<Product[]>(sampleProducts)
@@ -64,7 +69,8 @@ export default function ProductsPage() {
     concentration: '',
     quantity: 0,
     price: 0,
-    images: [] as string[]
+    images: [] as string[],
+    warehouse: ''
   })
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -116,7 +122,8 @@ export default function ProductsPage() {
       concentration: '',
       quantity: 0,
       price: 0,
-      images: []
+      images: [],
+      warehouse: ''
     })
   }
 
@@ -131,7 +138,8 @@ export default function ProductsPage() {
       concentration: product.concentration,
       quantity: product.quantity,
       price: product.price,
-      images: product.images
+      images: product.images,
+      warehouse: product.warehouse
     })
     setShowAddModal(true)
   }
@@ -150,9 +158,9 @@ export default function ProductsPage() {
 
   return (
     <div className="p-4 bg-gray-900 min-h-screen text-gray-100">
+      {/* Header */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
         <h1 className="text-2xl font-bold text-white">إدارة المنتجات</h1>
-        
         <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
           <div className="relative flex-1 min-w-[250px]">
             <FiSearch className="absolute right-3 top-3 text-gray-400" />
@@ -164,7 +172,6 @@ export default function ProductsPage() {
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
-          
           <button
             onClick={() => setShowAddModal(true)}
             className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center gap-2"
@@ -180,7 +187,6 @@ export default function ProductsPage() {
           <FiFilter className="text-gray-400" />
           <span className="text-gray-300">تصفية:</span>
         </div>
-        
         <select
           className="px-3 py-2 border rounded-lg bg-gray-800 border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 text-white"
           value={filterCategory}
@@ -191,7 +197,6 @@ export default function ProductsPage() {
             <option key={category} value={category}>{category}</option>
           ))}
         </select>
-        
         <select
           className="px-3 py-2 border rounded-lg bg-gray-800 border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 text-white"
           value={filterBrand}
@@ -219,6 +224,7 @@ export default function ProductsPage() {
                 <th className="px-4 py-3 text-right text-sm font-medium text-gray-300">التركيز</th>
                 <th className="px-4 py-3 text-right text-sm font-medium text-gray-300">الكمية</th>
                 <th className="px-4 py-3 text-right text-sm font-medium text-gray-300">السعر</th>
+                <th className="px-4 py-3 text-right text-sm font-medium text-gray-300">المخزن</th>
                 <th className="px-4 py-3 text-right text-sm font-medium text-gray-300">الصور</th>
                 <th className="px-4 py-3 text-right text-sm font-medium text-gray-300">إجراءات</th>
               </tr>
@@ -226,7 +232,7 @@ export default function ProductsPage() {
             <tbody className="bg-gray-800 divide-y divide-gray-700">
               {filteredProducts.length === 0 ? (
                 <tr>
-                  <td colSpan={11} className="px-4 py-6 text-center text-gray-400">
+                  <td colSpan={12} className="px-4 py-6 text-center text-gray-400">
                     لا توجد منتجات متطابقة مع بحثك
                   </td>
                 </tr>
@@ -242,6 +248,7 @@ export default function ProductsPage() {
                     <td className="px-4 py-3 text-sm text-gray-300">{product.concentration}</td>
                     <td className="px-4 py-3 text-sm text-gray-300">{product.quantity}</td>
                     <td className="px-4 py-3 text-sm text-gray-300">{product.price} ر.س</td>
+                    <td className="px-4 py-3 text-sm text-gray-300">{product.warehouse}</td>
                     <td className="px-4 py-3 text-sm text-gray-300">
                       <div className="flex gap-1">
                         {product.images.slice(0, 3).map((img, i) => (
@@ -258,20 +265,8 @@ export default function ProductsPage() {
                     </td>
                     <td className="px-4 py-3 text-sm text-gray-300">
                       <div className="flex justify-end gap-2">
-                        <button
-                          onClick={() => handleEdit(product)}
-                          className="text-blue-400 hover:text-blue-300 p-1"
-                          title="تعديل"
-                        >
-                          <FiEdit />
-                        </button>
-                        <button
-                          onClick={() => handleDelete(product.id)}
-                          className="text-red-400 hover:text-red-300 p-1"
-                          title="حذف"
-                        >
-                          <FiTrash2 />
-                        </button>
+                        <button onClick={() => handleEdit(product)} className="text-blue-400 hover:text-blue-300 p-1" title="تعديل"><FiEdit /></button>
+                        <button onClick={() => handleDelete(product.id)} className="text-red-400 hover:text-red-300 p-1" title="حذف"><FiTrash2 /></button>
                       </div>
                     </td>
                   </tr>
@@ -291,179 +286,44 @@ export default function ProductsPage() {
                 {editingProduct ? 'تعديل المنتج' : 'إضافة منتج جديد'}
               </h2>
               
-              <form onSubmit={handleSubmit}>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-1">اسم المنتج *</label>
-                    <input
-                      type="text"
-                      name="name"
-                      className="w-full px-4 py-2 border rounded-lg bg-gray-700 border-gray-600 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-white"
-                      value={formData.name}
-                      onChange={handleInputChange}
-                      required
-                    />
-                  </div>
-                  
-                  <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-1">اسم العميل *</label>
-                    <input
-                      type="text"
-                      name="customerName"
-                      className="w-full px-4 py-2 border rounded-lg bg-gray-700 border-gray-600 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-white"
-                      value={formData.customerName}
-                      onChange={handleInputChange}
-                      required
-                    />
-                  </div>
-                  
-                  <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-1">الفئة *</label>
-                    <select
-                      name="category"
-                      className="w-full px-4 py-2 border rounded-lg bg-gray-700 border-gray-600 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-white"
-                      value={formData.category}
-                      onChange={handleInputChange}
-                      required
-                    >
-                      <option value="">اختر الفئة</option>
-                      {categories.map(category => (
-                        <option key={category} value={category}>{category}</option>
-                      ))}
-                    </select>
-                  </div>
-                  
-                  <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-1">البراند *</label>
-                    <select
-                      name="brand"
-                      className="w-full px-4 py-2 border rounded-lg bg-gray-700 border-gray-600 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-white"
-                      value={formData.brand}
-                      onChange={handleInputChange}
-                      required
-                    >
-                      <option value="">اختر البراند</option>
-                      {brands.map(brand => (
-                        <option key={brand} value={brand}>{brand}</option>
-                      ))}
-                    </select>
-                  </div>
-                  
-                  <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-1">نوع الجرعة *</label>
-                    <select
-                      name="dosage"
-                      className="w-full px-4 py-2 border rounded-lg bg-gray-700 border-gray-600 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-white"
-                      value={formData.dosage}
-                      onChange={handleInputChange}
-                      required
-                    >
-                      <option value="">اختر نوع الجرعة</option>
-                      {dosages.map(dosage => (
-                        <option key={dosage} value={dosage}>{dosage}</option>
-                      ))}
-                    </select>
-                  </div>
-                  
-                  <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-1">التركيز *</label>
-                    <input
-                      type="text"
-                      name="concentration"
-                      className="w-full px-4 py-2 border rounded-lg bg-gray-700 border-gray-600 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-white"
-                      value={formData.concentration}
-                      onChange={handleInputChange}
-                      placeholder="مثال: 500 مجم"
-                      required
-                    />
-                  </div>
-                  
-                  <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-1">الكمية *</label>
-                    <input
-                      type="number"
-                      name="quantity"
-                      min="0"
-                      className="w-full px-4 py-2 border rounded-lg bg-gray-700 border-gray-600 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-white"
-                      value={formData.quantity}
-                      onChange={handleInputChange}
-                      required
-                    />
-                  </div>
-                  
-                  <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-1">السعر (ر.س) *</label>
-                    <input
-                      type="number"
-                      name="price"
-                      min="0"
-                      step="0.01"
-                      className="w-full px-4 py-2 border rounded-lg bg-gray-700 border-gray-600 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-white"
-                      value={formData.price}
-                      onChange={handleInputChange}
-                      required
-                    />
-                  </div>
-                  
-                  <div className="md:col-span-2">
-                    <label className="block text-sm font-medium text-gray-300 mb-1">الصور (حد أقصى 3 صور)</label>
-                    <div className="flex items-center gap-4">
-                      <label className="flex flex-col items-center justify-center border-2 border-dashed border-gray-600 rounded-lg p-4 cursor-pointer hover:border-blue-500">
-                        <FiImage className="text-gray-400 mb-2" />
-                        <span className="text-sm text-gray-400">اختر صور المنتج</span>
-                        <input
-                          type="file"
-                          className="hidden"
-                          accept="image/*"
-                          multiple
-                          onChange={handleImageUpload}
-                          disabled={formData.images.length >= 3}
-                        />
-                      </label>
-                      
-                      <div className="flex gap-2">
-                        {formData.images.map((img, index) => (
-                          <div key={index} className="relative">
-                            <div className="w-16 h-16 bg-gray-700 rounded flex items-center justify-center overflow-hidden">
-                              {img.startsWith('blob:') ? (
-                                <Image width={64} height={64} src={img} alt="Preview" className="w-full h-full object-cover" />
-                              ) : (
-                                <FiImage className="text-gray-400" />
-                              )}
-                            </div>
-                            <button
-                              type="button"
-                              onClick={() => removeImage(index)}
-                              className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs"
-                            >
-                              ×
-                            </button>
-                          </div>
-                        ))}
+              <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <input type="text" name="name" placeholder="اسم المنتج" value={formData.name} onChange={handleInputChange} required className="p-2 rounded bg-gray-700 border border-gray-600 text-white"/>
+                <input type="text" name="customerName" placeholder="اسم العميل" value={formData.customerName} onChange={handleInputChange} required className="p-2 rounded bg-gray-700 border border-gray-600 text-white"/>
+                <select name="category" value={formData.category} onChange={handleInputChange} required className="p-2 rounded bg-gray-700 border border-gray-600 text-white">
+                  <option value="">اختر الفئة</option>
+                  {categories.map(c => <option key={c} value={c}>{c}</option>)}
+                </select>
+                <select name="brand" value={formData.brand} onChange={handleInputChange} required className="p-2 rounded bg-gray-700 border border-gray-600 text-white">
+                  <option value="">اختر البراند</option>
+                  {brands.map(b => <option key={b} value={b}>{b}</option>)}
+                </select>
+                <select name="dosage" value={formData.dosage} onChange={handleInputChange} required className="p-2 rounded bg-gray-700 border border-gray-600 text-white">
+                  <option value="">اختر الجرعة</option>
+                  {dosages.map(d => <option key={d} value={d}>{d}</option>)}
+                </select>
+                <input type="text" name="concentration" placeholder="التركيز" value={formData.concentration} onChange={handleInputChange} required className="p-2 rounded bg-gray-700 border border-gray-600 text-white"/>
+                <input type="number" name="quantity" placeholder="الكمية" value={formData.quantity} onChange={handleInputChange} required className="p-2 rounded bg-gray-700 border border-gray-600 text-white"/>
+                <input type="number" name="price" placeholder="السعر" value={formData.price} onChange={handleInputChange} required className="p-2 rounded bg-gray-700 border border-gray-600 text-white"/>
+                <select name="warehouse" value={formData.warehouse} onChange={handleInputChange} required className="p-2 rounded bg-gray-700 border border-gray-600 text-white">
+                  <option value="">اختر المخزن</option>
+                  {warehouses.map(w => <option key={w} value={w}>{w}</option>)}
+                </select>
+                <div className="col-span-2">
+                  <label className="block mb-1">رفع صور</label>
+                  <input type="file" multiple onChange={handleImageUpload} className="p-2 bg-gray-700 border border-gray-600 rounded text-white w-full"/>
+                  <div className="flex mt-2 gap-2 flex-wrap">
+                    {formData.images.map((img, i) => (
+                      <div key={i} className="relative w-16 h-16 bg-gray-600 rounded overflow-hidden">
+                        <img src={img} alt="" className="w-full h-full object-cover"/>
+                        <button type="button" onClick={() => removeImage(i)} className="absolute top-0 right-0 bg-red-500 rounded-full w-5 h-5 text-xs text-white">x</button>
                       </div>
-                    </div>
-                    <p className="text-xs text-gray-400 mt-1">يمكنك رفع حتى 3 صور للمنتج</p>
+                    ))}
                   </div>
                 </div>
-                
-                <div className="flex justify-end gap-3 mt-6">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setShowAddModal(false)
-                      setEditingProduct(null)
-                      resetForm()
-                    }}
-                    className="px-4 py-2 border border-gray-600 rounded-lg text-gray-300 hover:bg-gray-700"
-                  >
-                    إلغاء
-                  </button>
-                  <button
-                    type="submit"
-                    className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-                  >
-                    {editingProduct ? 'حفظ التعديلات' : 'إضافة المنتج'}
-                  </button>
+
+                <div className="col-span-2 flex justify-end gap-2 mt-4">
+                  <button type="button" onClick={() => { setShowAddModal(false); setEditingProduct(null); resetForm(); }} className="px-4 py-2 border border-gray-600 rounded-lg text-gray-300 hover:bg-gray-700">إلغاء</button>
+                  <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">{editingProduct ? 'حفظ التعديلات' : 'إضافة المنتج'}</button>
                 </div>
               </form>
             </div>
