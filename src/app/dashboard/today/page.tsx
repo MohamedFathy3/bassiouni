@@ -12,7 +12,6 @@ import {
   FiPhone, 
   FiMapPin, 
   FiDollarSign,
-  FiShoppingBag
 } from 'react-icons/fi';
 import { FaPizzaSlice, FaHamburger, FaIceCream, FaCoffee } from 'react-icons/fa';
 
@@ -51,17 +50,17 @@ const OrderTypeIcon = ({ type, size = 20 }: { type: string, size?: number }) => 
   }
 };
 
-const StatCard = ({ title, value, icon, color }: { title: string, value: number, icon: React.ReactNode, color: string }) => (
-  <div className={`${color} p-3 rounded-lg border border-gray-100`}>
-    <div className="flex items-center justify-between">
-      <span className="text-sm text-gray-600">{title}</span>
-      <span className={`p-2 rounded-full ${color.replace('bg-', 'bg-').replace('-50', '-100')}`}>
-        {icon}
-      </span>
-    </div>
-    <p className="text-2xl font-bold mt-2 text-gray-800">{value}</p>
-  </div>
-);
+// const StatCard = ({ title, value, icon, color }: { title: string, value: number, icon: React.ReactNode, color: string }) => (
+//   <div className={`${color} p-3 rounded-lg border border-gray-100`}>
+//     <div className="flex items-center justify-between">
+//       <span className="text-sm text-gray-600">{title}</span>
+//       <span className={`p-2 rounded-full ${color.replace('bg-', 'bg-').replace('-50', '-100')}`}>
+//         {icon}
+//       </span>
+//     </div>
+//     <p className="text-2xl font-bold mt-2 text-gray-800">{value}</p>
+//   </div>
+// );
 
 export default function OrdersTodayPage() {
   const [orders, setOrders] = useState(sampleOrders);

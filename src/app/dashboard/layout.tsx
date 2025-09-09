@@ -57,7 +57,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             طلبات اليوم
           </NavLink>
           <NavLink href="/dashboard/sentorder" icon={<Send className="w-5 h-5" />} sidebarOpen={sidebarOpen}>
-            طلبات مرسلة
+            طلبات 
           </NavLink>
           <NavLink href="/dashboard/invoice" icon={<Archive className="w-5 h-5" />} sidebarOpen={sidebarOpen}>
             الفواتير

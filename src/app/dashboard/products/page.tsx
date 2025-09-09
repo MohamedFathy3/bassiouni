@@ -1,7 +1,7 @@
 'use client'
 import { useState } from 'react'
 import { FiSearch, FiPlus, FiEdit, FiTrash2, FiImage, FiFilter } from 'react-icons/fi'
-
+import Image from 'next/image'
 interface Product {
   id: number
   name: string
@@ -426,7 +426,7 @@ export default function ProductsPage() {
                           <div key={index} className="relative">
                             <div className="w-16 h-16 bg-gray-700 rounded flex items-center justify-center overflow-hidden">
                               {img.startsWith('blob:') ? (
-                                <img src={img} alt="Preview" className="w-full h-full object-cover" />
+                                <Image width={64} height={64} src={img} alt="Preview" className="w-full h-full object-cover" />
                               ) : (
                                 <FiImage className="text-gray-400" />
                               )}

@@ -1,7 +1,7 @@
 // pages/dashboard/invoice.tsx
 'use client';
 import { useState, useRef } from 'react';
-import { FiSearch, FiPrinter, FiArrowRight } from 'react-icons/fi';
+import { FiSearch, FiPrinter, } from 'react-icons/fi';
 import { useReactToPrint } from 'react-to-print';
 
 interface Medicine {
@@ -81,27 +81,27 @@ export default function InvoicePage() {
   );
 
   // Handle print
-  const handlePrint = useReactToPrint({
-    content: () => invoiceRef.current,
-    pageStyle: `
-      @page {
-        size: A4;
-        margin: 10mm;
-      }
-      @media print {
-        body {
-          direction: rtl;
-        }
-        .invoice-container {
-          box-shadow: none;
-          border: none;
-        }
-        .no-print {
-          display: none;
-        }
-      }
-    `
-  });
+  // const handlePrint = useReactToPrint({
+  //   content: () => invoiceRef.current,
+  //   pageStyle: `
+  //     @page {
+  //       size: A4;
+  //       margin: 10mm;
+  //     }
+  //     @media print {
+  //       body {
+  //         direction: rtl;
+  //       }
+  //       .invoice-container {
+  //         box-shadow: none;
+  //         border: none;
+  //       }
+  //       .no-print {
+  //         display: none;
+  //       }
+  //     }
+  //   `
+  // });
 
   return (
     <div className="p-4 space-y-6 bg-black">

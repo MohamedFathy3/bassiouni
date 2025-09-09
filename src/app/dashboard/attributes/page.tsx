@@ -106,7 +106,7 @@
                 <select
                 className="appearance-none pl-4 pr-10 py-2 border rounded-lg bg-gray-800 border-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
                 value={filter}
-                onChange={(e) => setFilter(e.target.value as any)}
+                onChange={(e) => setFilter(e.target.value as Brand['status'] | 'all')}
                 >
                 <option value="all">جميع الحالات</option>
                 <option value="approved">موافق عليه</option>

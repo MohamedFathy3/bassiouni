@@ -53,7 +53,7 @@ const sampleCompanies: Company[] = [
 
 export default function CompanyOrdersPage() {
   const [orders, setOrders] = useState<Order[]>([]);
-  const [companies, setCompanies] = useState<Company[]>(sampleCompanies);
+  const [companies,] = useState<Company[]>(sampleCompanies);
   const [selectedCompany, setSelectedCompany] = useState<number | null>(null);
   const [selectedProduct, setSelectedProduct] = useState<number | null>(null);
   const [quantity, setQuantity] = useState<number>(1);
@@ -133,11 +133,6 @@ export default function CompanyOrdersPage() {
   };
 
   // Change order status
-  const changeStatus = (id: number, status: OrderStatus) => {
-    setOrders(orders.map(order => 
-      order.id === id ? { ...order, status } : order
-    ));
-  };
 
   // Reset form
   const resetForm = () => {
@@ -187,7 +182,7 @@ export default function CompanyOrdersPage() {
       case 'rejected':
         return <span className="bg-red-100 text-red-800 px-2 py-1 rounded-full text-xs flex items-center gap-1"><FiX /> مرفوض</span>;
       case 'in_progress':
-        return <span className="bg-purple-100 text-purple-800 px-2 py-1 rounded-full text-xs flex items-center gap-1"><FiRefreshCw /> جاري التجهيز</span>;
+        return <span className="bg-purple-100 text-purple-800 px-2 py-1 rounded-full text-xs flex items-center gap-1"> جاري التجهيز</span>;
       case 'delivered':
         return <span className="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs flex items-center gap-1"><FiTruck /> تم التسليم</span>;
     }
