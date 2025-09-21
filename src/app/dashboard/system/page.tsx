@@ -5,12 +5,10 @@ import React, { useState, useMemo } from 'react';
 import {
   User,
   Phone,
-  Package,
   CreditCard,
   UploadCloud,
   Plus,
   Search,
-  RefreshCw,
 } from 'lucide-react';
 
 type Product = { id: number; name: string; price: number };

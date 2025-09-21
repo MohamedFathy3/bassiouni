@@ -2,7 +2,6 @@
 'use client';
 import { useState, useRef } from 'react';
 import { FiSearch, FiPrinter, } from 'react-icons/fi';
-import { useReactToPrint } from 'react-to-print';
 
 interface Medicine {
   id: number;
@@ -161,7 +160,6 @@ export default function InvoicePage() {
                       <button
                         onClick={() => {
                           setSelectedInvoice(invoice);
-                          setTimeout(handlePrint, 100);
                         }}
                         className="text-emerald-400 hover:text-emerald-300 p-1 flex items-center gap-1"
                         title="طباعة"

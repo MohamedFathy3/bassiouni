@@ -48,9 +48,11 @@ export default function WarehousesPage() {
   const [productPrice, setProductPrice] = useState<number>(0);
 
   // عند فتح المودال، نحدد أول صيدلية تلقائيًا
-  useEffect(() => {
-    if (pharmacies.length > 0) setPharmacy(pharmacies[0]);
-  }, [showModal]);
+useEffect(() => {
+  if (pharmacies.length > 0) setPharmacy(pharmacies[0]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+}, [showModal]);
+
 
   // إضافة منتج للمودال
   const addProduct = () => {

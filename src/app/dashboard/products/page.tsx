@@ -1,7 +1,6 @@
 'use client'
 import { useState } from 'react'
 import { FiSearch, FiPlus, FiEdit, FiTrash2, FiImage, FiFilter } from 'react-icons/fi'
-import Image from 'next/image'
 
 interface Product {
   id: number

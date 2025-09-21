@@ -1,10 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { FiSend, FiArrowRight } from "react-icons/fi";
 import { useRouter } from "next/navigation";
+import { FiSend, FiArrowRight } from "react-icons/fi";
 
-export default function OrderDetails({ params }: { params: { id: string } }) {
+export default function OrderDetails({ id }: { id: string }) {
   const router = useRouter();
   const [messages, setMessages] = useState([
     { from: "company", text: "تم استلام طلبك وسيتم مراجعته قريباً ✅" },
@@ -20,7 +20,6 @@ export default function OrderDetails({ params }: { params: { id: string } }) {
 
   return (
     <div className="min-h-screen bg-gray-900 text-white p-6">
-      {/* زر الرجوع */}
       <button
         onClick={() => router.back()}
         className="flex items-center gap-2 text-sm bg-gray-800 px-4 py-2 rounded-lg hover:bg-gray-700 mb-6"
@@ -29,7 +28,7 @@ export default function OrderDetails({ params }: { params: { id: string } }) {
         رجوع
       </button>
 
-      <h1 className="text-3xl font-bold mb-6">📄 تفاصيل الطلب #{params.id}</h1>
+      <h1 className="text-3xl font-bold mb-6">📄 تفاصيل الطلب #{id}</h1>
 
       {/* تفاصيل الطلب */}
       <div className="bg-gray-800 p-6 rounded-2xl mb-6 shadow-lg">
@@ -42,7 +41,7 @@ export default function OrderDetails({ params }: { params: { id: string } }) {
         </div>
       </div>
 
-      {/* منتجات الطلب */}
+      {/* المنتجات */}
       <div className="bg-gray-800 p-6 rounded-2xl mb-6 shadow-lg">
         <h2 className="text-xl font-semibold mb-4">🛒 المنتجات</h2>
         <table className="w-full text-sm border-collapse">

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from "react";
-import { MapPin, Package, ShoppingCart, DollarSign, ArrowLeft } from "lucide-react";
+import { MapPin, Package, DollarSign, ArrowLeft } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 interface Product {
