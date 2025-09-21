@@ -308,6 +308,10 @@ export default function ProductsPage() {
                   <option value="">اختر المخزن</option>
                   {warehouses.map(w => <option key={w} value={w}>{w}</option>)}
                 </select>
+   <select name="warehouse" value={formData.warehouse} onChange={handleInputChange} required className="p-2 rounded bg-gray-700 border border-gray-600 text-white">
+                  <option value="">كيمه العميل </option>
+                  {warehouses.map(w => <option key={w} value={w}>{w}</option>)}
+                </select>
                 <div className="col-span-2">
                   <label className="block mb-1">رفع صور</label>
                   <input type="file" multiple onChange={handleImageUpload} className="p-2 bg-gray-700 border border-gray-600 rounded text-white w-full"/>

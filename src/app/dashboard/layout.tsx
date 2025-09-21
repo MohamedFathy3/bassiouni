@@ -176,6 +176,13 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               className="flex items-center gap-2 text-gray-300 hover:text-emerald-400 transition"
             >
               <Package className="w-5 h-5" />
+              <span>تقارير</span>
+            </Link>
+            <Link
+              href="/dashboard/warehouse"
+              className="flex items-center gap-2 text-gray-300 hover:text-emerald-400 transition"
+            >
+              <Package className="w-5 h-5" />
               <span>المخازن</span>
             </Link>
             <Link
@@ -191,6 +198,13 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             >
               <Users className="w-5 h-5" />
               <span>إضافة موظفين</span>
+            </Link>
+              <Link
+              href="/dashboard/system"
+              className="flex items-center gap-2 text-gray-300 hover:text-emerald-400 transition"
+            >
+              <Store className="w-5 h-5" />
+              <span>النظام </span>
             </Link>
           </nav>
 
