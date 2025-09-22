@@ -23,11 +23,14 @@ export default function OrdersPage() {
     { id: 4, name: 'دواء سعال', price: 18 },
   ];
 
-  const companies = {
-    'شركة النور': ['منتج نور A', 'منتج نور B', 'منتج نور C'],
-    'شركة الحياة': ['منتج حياة 1', 'منتج حياة 2'],
-    'شركة الأمل': ['منتج أمل X', 'منتج أمل Y', 'منتج أمل Z'],
-  };
+type CompanyName = "شركة النور" | "شركة الحياة" | "شركة الأمل";
+
+const companies: Record<CompanyName, string[]> = {
+  "شركة النور": ["منتج نور A", "منتج نور B", "منتج نور C"],
+  "شركة الحياة": ["منتج حياة 1", "منتج حياة 2"],
+  "شركة الأمل": ["منتج أمل X", "منتج أمل Y", "منتج أمل Z"],
+};
+
 
   const paymentMethods = ['كاش', 'فيزا', 'مدى', 'Apple Pay'];
 
@@ -170,13 +173,21 @@ export default function OrdersPage() {
     setCompanySearch('');
   }
 
-  // company product search results
-  const companyAvailableProducts = useMemo(() => {
-    if (!selectedCompany) return [];
-    const list = companies[selectedCompany] || [];
-    if (!companySearch.trim()) return list;
-    return list.filter((p) => p.toLowerCase().includes(companySearch.trim().toLowerCase()));
-  }, [selectedCompany, companySearch]);
+
+  
+const companyAvailableProducts = useMemo(() => {
+  if (!selectedCompany || !(selectedCompany in companies)) return [];
+
+  const list = companies[selectedCompany as CompanyName] ?? [];
+
+  const search = companySearch.trim().toLowerCase();
+  if (!search) return list;
+
+  return list.filter((product) =>
+    product.toLowerCase().includes(search)
+  );
+}, [selectedCompany, companySearch]);
+
 
   // ----- UI -----
   return (

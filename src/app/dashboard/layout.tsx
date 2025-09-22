@@ -30,7 +30,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
   return (
     <div
-      className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black flex text-white"
+      className="min-h-screen  flex text-white"
       dir="rtl"
     >
       {/* القائمة الجانبية */}
@@ -172,7 +172,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           {/* روابط إضافية في الهيدر */}
           <nav className="hidden md:flex items-center gap-6 text-sm font-medium">
             <Link
-              href="/dashboard/warehouse"
+              href="/dashboard/"
               className="flex items-center gap-2 text-gray-300 hover:text-emerald-400 transition"
             >
               <Package className="w-5 h-5" />

@@ -1,8 +1,8 @@
 'use client';
 
 import { useState } from "react";
+import { useParams, useRouter } from "next/navigation";
 import { MapPin, Package, DollarSign, ArrowLeft } from "lucide-react";
-import { useRouter } from "next/navigation";
 
 interface Product {
   id: number;
@@ -18,11 +18,17 @@ interface WarehouseDetails {
   products: Product[];
 }
 
-export default function WarehouseDetailsPage({ params }: { params: { id: string } }) {
+export default function WarehouseDetailsPage() {
+  const params = useParams();
   const router = useRouter();
+
+  // تحويل id من params
+  const id = params?.id as string;
+
+  // بيانات وهمية للمخزن
   const [warehouse] = useState<WarehouseDetails>({
-    id: Number(params.id),
-    name: `مخزن ${params.id}`,
+    id: Number(id),
+    name: `مخزن ${id}`,
     location: "القاهرة - مدينة نصر",
     products: [
       { id: 1, name: "بانادول", quantity: 200, price: 50 },
