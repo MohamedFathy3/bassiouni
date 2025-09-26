@@ -44,7 +44,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           {sidebarOpen ? (
             <div className="text-center font-bold text-2xl tracking-wide">
               <span className="text-white">Pharma</span>
-              <span className="text-emerald-400">Care</span>
+              <span className="text-emerald-400">bassiony</span>
             </div>
           ) : (
             <div className="mx-auto">
@@ -65,46 +65,46 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
         {/* الروابط */}
         <nav className="flex-1 p-4 space-y-2 text-sm overflow-y-auto">
-          <NavLink href="/dashboard/" icon={<Home className="w-5 h-5" />} sidebarOpen={sidebarOpen}>
+          <NavLink href="/Pharma/" icon={<Home className="w-5 h-5" />} sidebarOpen={sidebarOpen}>
             الصفحة الرئيسية
           </NavLink>
           <NavLink
-            href="/dashboard/today"
+            href="/Pharma/today"
             icon={<ClipboardList className="w-5 h-5" />}
             sidebarOpen={sidebarOpen}
           >
             طلبات اليوم
           </NavLink>
           <NavLink
-            href="/dashboard/sentorder"
+            href="/Pharma/sentorder"
             icon={<Send className="w-5 h-5" />}
             sidebarOpen={sidebarOpen}
           >
-            طلب شركه
+           عروض الشركات 
           </NavLink>
           <NavLink
-            href="/dashboard/massgeorder"
+            href="/Pharma/massgeorder"
             icon={<Send className="w-5 h-5" />}
             sidebarOpen={sidebarOpen}
           >
             طلباتي
           </NavLink>
           <NavLink
-            href="/dashboard/invoice"
+            href="/Pharma/invoice"
             icon={<Archive className="w-5 h-5" />}
             sidebarOpen={sidebarOpen}
           >
             الفواتير
           </NavLink>
           <NavLink
-            href="/dashboard/attributes"
+            href="/Pharma/attributes"
             icon={<PlusCircle className="w-5 h-5" />}
             sidebarOpen={sidebarOpen}
           >
             الأصناف والبراندات
           </NavLink>
           <NavLink
-            href="/dashboard/products"
+            href="/Pharma/products"
             icon={<Mail className="w-5 h-5" />}
             sidebarOpen={sidebarOpen}
           >
@@ -115,14 +115,14 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           <SidebarDropdown sidebarOpen={sidebarOpen} />
 
           <NavLink
-            href="/dashboard/profile"
+            href="/Pharma/profile"
             icon={<User className="w-5 h-5" />}
             sidebarOpen={sidebarOpen}
           >
             الملف الشخصي
           </NavLink>
           <NavLink
-            href="/dashboard/settings"
+            href="/Pharma/settings"
             icon={<Settings className="w-5 h-5" />}
             sidebarOpen={sidebarOpen}
           >
@@ -172,35 +172,35 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           {/* روابط إضافية في الهيدر */}
           <nav className="hidden md:flex items-center gap-6 text-sm font-medium">
             <Link
-              href="/dashboard/"
+              href="/Pharma/"
               className="flex items-center gap-2 text-gray-300 hover:text-emerald-400 transition"
             >
               <Package className="w-5 h-5" />
               <span>تقارير</span>
             </Link>
             <Link
-              href="/dashboard/warehouse"
+              href="/Pharma/warehouse"
               className="flex items-center gap-2 text-gray-300 hover:text-emerald-400 transition"
             >
               <Package className="w-5 h-5" />
               <span>المخازن</span>
             </Link>
             <Link
-              href="/dashboard/add-pharmacy"
+              href="/Pharma/add-pharmacy"
               className="flex items-center gap-2 text-gray-300 hover:text-emerald-400 transition"
             >
               <Store className="w-5 h-5" />
               <span>إضافة صيدلية</span>
             </Link>
             <Link
-              href="/dashboard/add-employee"
+              href="/Pharma/add-employee"
               className="flex items-center gap-2 text-gray-300 hover:text-emerald-400 transition"
             >
               <Users className="w-5 h-5" />
               <span>إضافة موظفين</span>
             </Link>
               <Link
-              href="/dashboard/system"
+              href="/Pharma/system"
               className="flex items-center gap-2 text-gray-300 hover:text-emerald-400 transition"
             >
               <Store className="w-5 h-5" />
@@ -279,14 +279,14 @@ function SidebarDropdown({ sidebarOpen }: { sidebarOpen: boolean }) {
         >
           <div className="bg-gray-800 border border-gray-700 rounded-xl px-2 py-2 space-y-1 mt-2">
             <Link
-              href="/dashboard/offers"
+              href="/Pharma/offers"
               className="flex items-center gap-2 px-4 py-2 rounded-md hover:bg-emerald-600/20 transition text-white"
             >
               <Tag className="w-4 h-4" />
               <span>العروض</span>
             </Link>
             <Link
-              href="/dashboard/coupons"
+              href="/Pharma/coupons"
               className="flex items-center gap-2 px-4 py-2 rounded-md hover:bg-emerald-600/20 transition text-white"
             >
               <TicketPercent className="w-4 h-4" />

@@ -125,7 +125,7 @@ useEffect(() => {
 
             <div className="mt-6 text-left">
               <Link
-                href={`/dashboard/warehouse/${warehouse.id}`}
+                href={`/Pharma/warehouse/${warehouse.id}`}
                 className="inline-flex items-center gap-2 px-5 py-3 bg-emerald-600 hover:bg-emerald-700 rounded-2xl text-sm font-semibold text-white transition duration-300"
               >
                 المزيد
