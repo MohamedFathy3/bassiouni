@@ -100,32 +100,23 @@ export default function CompanyOrdersPage() {
     });
 
   const calculatePriceWithDiscount = (product: Product) => {
-    let discountValue = 0;
-    if (product.discount) discountValue = product.discount;
-    else if (product.discountTier)
-      discountValue = (parseInt(product.discountTier) / 100) * product.price;
-    return Math.max(0, product.price - discountValue);
+    const discountPercent = product.discount ?? parseInt(product.discountTier ?? '0');
+    return product.price - (product.price * discountPercent) / 100;
   };
 
   const addProductToOrder = (product: Product, quantity: number) => {
     if (quantity < 1) return;
     const price = calculatePriceWithDiscount(product);
     const total = price * quantity;
-
     const newItem: OrderItem = {
       productId: product.id,
       name: product.name,
       quantity,
       unit: product.unit,
       price,
-      discount: product.discount
-        ? product.discount
-        : product.discountTier
-        ? (parseInt(product.discountTier) / 100) * product.price
-        : 0,
+      discount: product.discount ?? parseInt(product.discountTier ?? '0'),
       total,
     };
-
     setOrderItems((prev) => [...prev, newItem]);
   };
 
@@ -138,7 +129,6 @@ export default function CompanyOrdersPage() {
   const submitOrder = () => {
     if (!selectedCompany || orderItems.length === 0) return;
     const comp = companies.find((c) => c.id === selectedCompany)!;
-
     const newOrder: Order = {
       id: orders.length + 1,
       company: comp.name,
@@ -149,7 +139,6 @@ export default function CompanyOrdersPage() {
       status: 'pending',
       notes,
     };
-
     setOrders((prev) => [newOrder, ...prev]);
     setOrderItems([]);
     setNotes('');
@@ -158,173 +147,124 @@ export default function CompanyOrdersPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-emerald-50 text-gray-800 p-6">
+    <div className="min-h-screen bg-gray-50 text-gray-800 p-6">
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
         {/* الشركات والتصنيفات */}
-        <aside className="lg:col-span-1 bg-white/90 backdrop-blur p-5 rounded-2xl shadow-lg space-y-4 border border-gray-100">
-          <div>
-            <h2 className="text-lg font-semibold mb-2 text-right text-emerald-700">🏢 الشركات</h2>
-            <select
-              className="w-full p-2 rounded-xl bg-gray-50 border border-gray-200 text-right focus:ring-2 focus:ring-emerald-400"
-              value={selectedCompany || ''}
-              onChange={(e) => setSelectedCompany(Number(e.target.value) || null)}
-            >
-              <option value="">اختر الشركة...</option>
-              {companies.map((c) => (
-                <option key={c.id} value={c.id}>
-                  {c.name}
-                </option>
-              ))}
-            </select>
-          </div>
+        <aside className="lg:col-span-1 bg-white p-5 rounded-2xl shadow-md border border-gray-100 space-y-4">
+          <h2 className="text-lg font-semibold text-right text-emerald-700">🏢 الشركات</h2>
+          <select
+            className="w-full p-2 rounded-xl bg-gray-100 border border-gray-200 text-right focus:ring-2 focus:ring-emerald-400"
+            value={selectedCompany || ''}
+            onChange={(e) => setSelectedCompany(Number(e.target.value) || null)}
+          >
+            <option value="">اختر الشركة...</option>
+            {companies.map((c) => (
+              <option key={c.id} value={c.id}>{c.name}</option>
+            ))}
+          </select>
 
-          <div>
-            <h2 className="text-lg font-semibold mb-2 text-right text-emerald-700">📦 التصنيفات</h2>
-            <select
-              className="w-full p-2 rounded-xl bg-gray-50 border border-gray-200 text-right focus:ring-2 focus:ring-emerald-400"
-              value={selectedCategory || ''}
-              onChange={(e) => setSelectedCategory(Number(e.target.value) || null)}
-            >
-              <option value="">اختر التصنيف...</option>
-              {categories.map((c) => (
-                <option key={c.id} value={c.id}>
-                  {c.name}
-                </option>
-              ))}
-            </select>
-          </div>
+          <h2 className="text-lg font-semibold text-right text-emerald-700">📦 التصنيفات</h2>
+          <select
+            className="w-full p-2 rounded-xl bg-gray-100 border border-gray-200 text-right focus:ring-2 focus:ring-emerald-400"
+            value={selectedCategory || ''}
+            onChange={(e) => setSelectedCategory(Number(e.target.value) || null)}
+          >
+            <option value="">اختر التصنيف...</option>
+            {categories.map((c) => (
+              <option key={c.id} value={c.id}>{c.name}</option>
+            ))}
+          </select>
 
-          <div>
-            <h2 className="text-lg font-semibold mb-2 text-right text-emerald-700">🔍 بحث</h2>
-            <input
-              type="text"
-              placeholder="ابحث عن منتج..."
-              value={productSearch}
-              onChange={(e) => setProductSearch(e.target.value)}
-              className="w-full p-2 rounded-xl bg-gray-50 border border-gray-200 text-right focus:ring-2 focus:ring-emerald-400"
-            />
-          </div>
+          <h2 className="text-lg font-semibold text-right text-emerald-700">🔍 بحث</h2>
+          <input
+            type="text"
+            placeholder="ابحث عن منتج..."
+            value={productSearch}
+            onChange={(e) => setProductSearch(e.target.value)}
+            className="w-full p-2 rounded-xl bg-gray-100 border border-gray-200 text-right focus:ring-2 focus:ring-emerald-400"
+          />
         </aside>
 
         {/* العروض والمنتجات */}
-        <main className="lg:col-span-2 space-y-6">
-          {/* أهم العروض */}
-   {/* 🌟 أهم العروض */}
-<section className="bg-gradient-to-br from-white to-emerald-50 p-5 rounded-2xl shadow-lg border border-transparent">
-  <h2 className="text-lg font-semibold text-emerald-700 mb-4">🌟 أهم العروض</h2>
-
-  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
-    {bestOffers.slice(0, 8).map((p) => (
-      <div
-        key={p.id}
-        className="p-4 bg-white rounded-2xl shadow-md hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between border border-gray-100"
-      >
-        <div className="flex justify-between items-start">
-          <div className="space-y-1">
-            <div className="font-semibold text-gray-800">{p.name}</div>
-            <div className="text-sm text-gray-500">
-              {companies.find((c) => c.id === p.companyId)?.name}
-            </div>
-          </div>
-          <div className="text-right">
-            <div className="text-sm font-bold text-emerald-700">
-              {calculatePriceWithDiscount(p)} ر.س
-            </div>
-            <div className="text-xs text-gray-400 line-through">{p.price} ر.س</div>
-          </div>
-        </div>
-
-        <button
-          onClick={() => addProductToOrder(p, 1)}
-          className="mt-3 px-3 py-2 rounded-xl bg-emerald-600 text-white text-sm hover:bg-emerald-700 transition"
-        >
-          أضف للطلب
-        </button>
-      </div>
-    ))}
-  </div>
-</section>
-
-{/* 🛒 المنتجات */}
-<section className="bg-gradient-to-br from-white to-emerald-50 p-5 rounded-2xl shadow-lg border border-transparent mt-8">
-  <h2 className="text-lg font-semibold text-emerald-700 mb-4">🛒 المنتجات</h2>
-
-  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
-    {availableProducts.map((p) => (
-      <div
-        key={p.id}
-        className="p-4 bg-white rounded-2xl shadow-md hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between border border-gray-100"
-      >
-        <div className="flex justify-between items-start">
-          <div className="space-y-1">
-            <div className="font-semibold text-gray-800">{p.name}</div>
-            <div className="text-sm text-gray-500">
-              {companies.find((c) => c.id === p.companyId)?.name}
-            </div>
-          </div>
-          <div className="text-right">
-            {p.discount > 0 ? (
-              <>
-                <div className="text-sm font-bold text-emerald-700">
-                  {p.price - (p.price * p.discount) / 100} ر.س
+        <main className="lg:col-span-2 space-y-8">
+          <section className="bg-white p-5 rounded-2xl shadow-md border border-gray-100">
+            <h2 className="text-lg font-semibold text-emerald-700 mb-4">🌟 أهم العروض</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
+              {bestOffers.slice(0, 8).map((p) => (
+                <div key={p.id} className="p-4 bg-gray-50 rounded-2xl shadow hover:shadow-lg transition flex flex-col justify-between border border-gray-100">
+                  <div className="flex justify-between items-start">
+                    <div>
+                      <div className="font-semibold">{p.name}</div>
+                      <div className="text-sm text-gray-500">{companies.find((c) => c.id === p.companyId)?.name}</div>
+                    </div>
+                    <div className="text-right">
+                      <div className="text-sm font-bold text-emerald-700">{calculatePriceWithDiscount(p)} ر.س</div>
+                      <div className="text-xs text-gray-400 line-through">{p.price} ر.س</div>
+                    </div>
+                  </div>
+                  <button onClick={() => addProductToOrder(p, 1)} className="mt-3 px-3 py-2 rounded-xl bg-emerald-600 text-white text-sm hover:bg-emerald-700 transition">
+                    أضف للطلب
+                  </button>
                 </div>
-                <div className="text-xs text-gray-400 line-through">{p.price} ر.س</div>
-              </>
-            ) : (
-              <div className="text-sm font-bold text-emerald-700">{p.price} ر.س</div>
-            )}
-          </div>
-        </div>
+              ))}
+            </div>
+          </section>
 
-        <button
-          onClick={() => addProductToOrder(p, 1)}
-          className="mt-3 px-3 py-2 rounded-xl bg-emerald-600 text-white text-sm hover:bg-emerald-700 transition"
-        >
-          أضف للطلب
-        </button>
-      </div>
-    ))}
-  </div>
-</section>
-
+          <section className="bg-white p-5 rounded-2xl shadow-md border border-gray-100">
+            <h2 className="text-lg font-semibold text-emerald-700 mb-4">🛒 المنتجات</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
+              {availableProducts.map((p) => (
+                <div key={p.id} className="p-4 bg-gray-50 rounded-2xl shadow hover:shadow-lg transition flex flex-col justify-between border border-gray-100">
+                  <div className="flex justify-between items-start">
+                    <div>
+                      <div className="font-semibold">{p.name}</div>
+                      <div className="text-sm text-gray-500">{companies.find((c) => c.id === p.companyId)?.name}</div>
+                    </div>
+                    <div className="text-right">
+                      {(p.discount ?? 0) > 0 ? (
+                        <>
+                          <div className="text-sm font-bold text-emerald-700">
+                            {p.price - (p.price * (p.discount ?? 0)) / 100} ر.س
+                          </div>
+                          <div className="text-xs text-gray-400 line-through">{p.price} ر.س</div>
+                        </>
+                      ) : (
+                        <div className="text-sm font-bold text-emerald-700">{p.price} ر.س</div>
+                      )}
+                    </div>
+                  </div>
+                  <button onClick={() => addProductToOrder(p, 1)} className="mt-3 px-3 py-2 rounded-xl bg-emerald-600 text-white text-sm hover:bg-emerald-700 transition">
+                    أضف للطلب
+                  </button>
+                </div>
+              ))}
+            </div>
+          </section>
         </main>
 
         {/* ملخص الطلب */}
-        <aside className="lg:col-span-1 bg-white/90 backdrop-blur p-5 rounded-2xl shadow-lg border border-gray-100">
-          <h2 className="text-lg font-semibold mb-3 text-right text-emerald-700">
-            🧾 ملخص الطلب الحالي
-          </h2>
+        <aside className="lg:col-span-1 bg-white p-5 rounded-2xl shadow-md border border-gray-100">
+          <h2 className="text-lg font-semibold mb-3 text-right text-emerald-700">🧾 ملخص الطلب</h2>
           <div className="space-y-3 max-h-80 overflow-y-auto">
             {orderItems.map((it, idx) => (
-              <div
-                key={idx}
-                className="p-3 bg-gray-50 rounded-lg flex justify-between shadow-sm hover:shadow-md transition"
-              >
+              <div key={idx} className="p-3 bg-gray-50 rounded-lg flex justify-between shadow-sm hover:shadow transition">
                 <div className="text-right">
                   <div className="font-medium">{it.name}</div>
-                  <div className="text-sm text-gray-500">
-                    {it.quantity} × {it.price} ر.س
-                  </div>
+                  <div className="text-sm text-gray-500">{it.quantity} × {it.price} ر.س</div>
                 </div>
                 <div className="flex items-center gap-2">
                   <div className="font-bold text-gray-800">{it.total} ر.س</div>
-                  <button
-                    onClick={() => removeOrderItem(idx)}
-                    className="text-red-500 hover:text-red-700 transition"
-                  >
+                  <button onClick={() => removeOrderItem(idx)} className="text-red-500 hover:text-red-700 transition">
                     <FiTrash2 />
                   </button>
                 </div>
               </div>
             ))}
           </div>
-
           <div className="mt-4 bg-gray-50 p-4 rounded-lg border border-gray-100">
             <div className="flex justify-between mb-2">
               <div className="text-sm text-gray-600">الإجمالي</div>
-              <div className="font-bold text-lg text-gray-800">
-                {calculateOrderTotal()} ر.س
-              </div>
+              <div className="font-bold text-lg text-gray-800">{calculateOrderTotal()} ر.س</div>
             </div>
             <button
               onClick={submitOrder}

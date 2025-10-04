@@ -1,9 +1,8 @@
 // pages/dashboard/invoice.tsx
 'use client';
 
-import { useState, useRef } from 'react';
-import { FiSearch, FiPrinter } from 'react-icons/fi';
-import { useReactToPrint } from 'react-to-print';
+import { useState } from 'react';
+import { FiSearch, FiEye } from 'react-icons/fi';
 
 interface Medicine {
   id: number;
@@ -71,21 +70,7 @@ const sampleInvoices: Invoice[] = [
 export default function InvoicePage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedInvoice, setSelectedInvoice] = useState<Invoice | null>(null);
-  const invoiceRef = useRef<HTMLDivElement>(null);
 
-  // ✅ تفعيل الطباعة
-  const handlePrint = useReactToPrint({
-    content: () => invoiceRef.current,
-    pageStyle: `
-      @page { size: A4; margin: 15mm; }
-      @media print {
-        body { direction: rtl; font-family: 'Cairo', sans-serif; }
-        .no-print { display: none; }
-      }
-    `,
-  });
-
-  // ✅ البحث في الفواتير
   const filteredInvoices = sampleInvoices.filter(
     (invoice) =>
       invoice.invoiceNumber.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -94,16 +79,16 @@ export default function InvoicePage() {
   );
 
   return (
-    <div className="p-8 bg-gray-100 min-h-screen">
+    <div className="p-8 bg-white min-h-screen">
       {/* 🔹 العنوان وشريط البحث */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
         <h1 className="text-3xl font-bold text-emerald-700">🧾 الفواتير</h1>
         <div className="relative w-full md:w-1/3">
           <FiSearch className="absolute right-3 top-3 text-gray-400" />
           <input
             type="text"
             placeholder="ابحث برقم الفاتورة أو اسم العميل..."
-            className="w-full pr-10 pl-4 py-2 rounded-xl border border-gray-300 focus:ring-2 focus:ring-emerald-500 outline-none"
+            className="w-full pr-10 pl-4 py-2 rounded-xl border border-gray-200 focus:ring-2 focus:ring-emerald-500 outline-none"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
@@ -111,7 +96,7 @@ export default function InvoicePage() {
       </div>
 
       {/* 🔹 جدول الفواتير */}
-      <div className="bg-white shadow-md rounded-2xl border border-gray-200 overflow-hidden">
+      <div className="bg-white shadow-lg rounded-2xl border border-gray-100 overflow-hidden transition">
         <table className="min-w-full text-right text-gray-700">
           <thead className="bg-emerald-50 text-emerald-700 text-sm uppercase">
             <tr>
@@ -120,7 +105,7 @@ export default function InvoicePage() {
               <th className="px-6 py-3">العميل</th>
               <th className="px-6 py-3">الصيدلية</th>
               <th className="px-6 py-3">الإجمالي</th>
-              <th className="px-6 py-3">الإجراء</th>
+              <th className="px-6 py-3">عرض التفاصيل</th>
             </tr>
           </thead>
           <tbody>
@@ -134,7 +119,8 @@ export default function InvoicePage() {
               filteredInvoices.map((invoice) => (
                 <tr
                   key={invoice.id}
-                  className={`hover:bg-emerald-50 transition ${
+                  onClick={() => setSelectedInvoice(invoice)}
+                  className={`hover:bg-emerald-50 transition cursor-pointer ${
                     selectedInvoice?.id === invoice.id ? 'bg-emerald-50' : 'bg-white'
                   }`}
                 >
@@ -147,14 +133,11 @@ export default function InvoicePage() {
                   </td>
                   <td className="px-6 py-4">
                     <button
-                      onClick={() => {
-                        setSelectedInvoice(invoice);
-                        setTimeout(() => handlePrint(), 300);
-                      }}
-                      className="flex items-center gap-2 px-4 py-2 rounded-lg bg-emerald-600 text-white hover:bg-emerald-700 transition-all shadow-md"
+                      onClick={() => setSelectedInvoice(invoice)}
+                      className="flex items-center gap-2 px-4 py-2 rounded-lg bg-emerald-600 text-white hover:bg-emerald-700 transition-all shadow-sm"
                     >
-                      <FiPrinter />
-                      طباعة
+                      <FiEye />
+                      عرض
                     </button>
                   </td>
                 </tr>
@@ -164,41 +147,35 @@ export default function InvoicePage() {
         </table>
       </div>
 
-      {/* 🔹 قالب الفاتورة للطباعة */}
+      {/* 🔹 تفاصيل الفاتورة */}
       {selectedInvoice && (
-        <div className="hidden">
-          <div ref={invoiceRef} className="p-10 bg-white text-black" dir="rtl">
-            {/* Header */}
-            <div className="flex justify-between items-start mb-8 border-b pb-4">
-              <div>
-                <h2 className="text-2xl font-bold text-emerald-700">فاتورة مبيعات</h2>
-                <p className="text-gray-600">نظام إدارة الفواتير</p>
-              </div>
-              <div className="text-left">
-                <p className="font-bold">{selectedInvoice.invoiceNumber}</p>
-                <p className="text-gray-600">التاريخ: {selectedInvoice.date}</p>
-              </div>
+        <div className="mt-10 p-6 bg-gray-50 border border-gray-200 rounded-2xl shadow-sm">
+          <div className="flex justify-between items-start mb-6 border-b pb-4">
+            <div>
+              <h2 className="text-2xl font-bold text-emerald-700">تفاصيل الفاتورة</h2>
+              <p className="text-gray-500 text-sm">رقم: {selectedInvoice.invoiceNumber}</p>
             </div>
+            <span className="text-gray-600">{selectedInvoice.date}</span>
+          </div>
 
-            {/* Customer & Pharmacy */}
-            <div className="grid grid-cols-2 gap-6 mb-8">
-              <div className="bg-gray-50 p-4 rounded-lg">
-                <h3 className="font-semibold mb-2 text-gray-700">معلومات العميل</h3>
-                <p>{selectedInvoice.customer.name}</p>
-                <p>{selectedInvoice.customer.phone}</p>
-                <p>{selectedInvoice.customer.address}</p>
-              </div>
-              <div className="bg-gray-50 p-4 rounded-lg">
-                <h3 className="font-semibold mb-2 text-gray-700">معلومات الصيدلية</h3>
-                <p>{selectedInvoice.pharmacy.name} ({selectedInvoice.pharmacy.type})</p>
-                <p>خصم: {selectedInvoice.pharmacy.discount}%</p>
-                <p>{selectedInvoice.pharmacy.address}</p>
-              </div>
+          <div className="grid md:grid-cols-2 gap-6 mb-6">
+            <div className="bg-white p-4 rounded-xl border border-gray-200 shadow-sm">
+              <h3 className="font-semibold mb-2 text-emerald-700">معلومات العميل</h3>
+              <p>{selectedInvoice.customer.name}</p>
+              <p>{selectedInvoice.customer.phone}</p>
+              <p>{selectedInvoice.customer.address}</p>
             </div>
+            <div className="bg-white p-4 rounded-xl border border-gray-200 shadow-sm">
+              <h3 className="font-semibold mb-2 text-emerald-700">معلومات الصيدلية</h3>
+              <p>{selectedInvoice.pharmacy.name} ({selectedInvoice.pharmacy.type})</p>
+              <p>خصم: {selectedInvoice.pharmacy.discount}%</p>
+              <p>{selectedInvoice.pharmacy.address}</p>
+            </div>
+          </div>
 
-            {/* Medicines */}
-            <table className="min-w-full border border-gray-200 text-sm mb-6">
-              <thead className="bg-gray-100 text-gray-700">
+          <div className="overflow-x-auto">
+            <table className="min-w-full text-sm border border-gray-200 rounded-xl overflow-hidden">
+              <thead className="bg-emerald-50 text-gray-700">
                 <tr>
                   <th className="px-4 py-2">#</th>
                   <th className="px-4 py-2">اسم الدواء</th>
@@ -210,7 +187,7 @@ export default function InvoicePage() {
               </thead>
               <tbody>
                 {selectedInvoice.medicines.map((m, i) => (
-                  <tr key={m.id} className="border-t">
+                  <tr key={m.id} className="border-t hover:bg-gray-100 transition">
                     <td className="px-4 py-2">{i + 1}</td>
                     <td className="px-4 py-2">{m.name}</td>
                     <td className="px-4 py-2">{m.quantity}</td>
@@ -221,33 +198,26 @@ export default function InvoicePage() {
                 ))}
               </tbody>
             </table>
+          </div>
 
-            {/* Totals */}
-            <div className="flex justify-end">
-              <div className="w-1/2 bg-gray-50 rounded-lg p-4">
-                <div className="flex justify-between border-b py-1">
-                  <span>المجموع الفرعي:</span>
-                  <span>{selectedInvoice.subtotal.toFixed(2)} ر.س</span>
-                </div>
-                <div className="flex justify-between border-b py-1 text-red-600">
-                  <span>الخصومات:</span>
-                  <span>-{selectedInvoice.totalDiscount.toFixed(2)} ر.س</span>
-                </div>
-                <div className="flex justify-between border-b py-1">
-                  <span>الضريبة:</span>
-                  <span>{selectedInvoice.tax.toFixed(2)} ر.س</span>
-                </div>
-                <div className="flex justify-between pt-2 font-bold text-emerald-700 text-lg">
-                  <span>الإجمالي النهائي:</span>
-                  <span>{selectedInvoice.total.toFixed(2)} ر.س</span>
-                </div>
+          <div className="mt-6 flex justify-end">
+            <div className="w-full md:w-1/2 bg-white p-4 rounded-xl border border-gray-200 shadow-sm">
+              <div className="flex justify-between border-b py-1">
+                <span>المجموع الفرعي:</span>
+                <span>{selectedInvoice.subtotal.toFixed(2)} ر.س</span>
               </div>
-            </div>
-
-            {/* Footer */}
-            <div className="text-center text-gray-500 text-sm mt-10 border-t pt-4">
-              <p>شكراً لتعاملكم معنا ❤️</p>
-              <p>للاستفسارات: 0123456789 | info@pharmacy.com</p>
+              <div className="flex justify-between border-b py-1 text-red-600">
+                <span>الخصومات:</span>
+                <span>-{selectedInvoice.totalDiscount.toFixed(2)} ر.س</span>
+              </div>
+              <div className="flex justify-between border-b py-1">
+                <span>الضريبة:</span>
+                <span>{selectedInvoice.tax.toFixed(2)} ر.س</span>
+              </div>
+              <div className="flex justify-between pt-2 font-bold text-emerald-700 text-lg">
+                <span>الإجمالي النهائي:</span>
+                <span>{selectedInvoice.total.toFixed(2)} ر.س</span>
+              </div>
             </div>
           </div>
         </div>

@@ -47,18 +47,16 @@ const sampleProducts: Product[] = [
 
 const categories = ['مسكنات', 'فيتامينات', 'مضادات حيوية', 'أدوية سكري', 'مستحضرات جلدية']
 const brands = ['جلاكسو سميث كلاين', 'نوفارتس', 'فايزر', 'سانوفي', 'ناتورال']
-const dosages = ['أقراص', 'شراب', 'حقن', 'كريم', 'مرهم', 'أقراص فوارة']
-const warehouses = ['مخزن القاهرة', 'مخزن الإسكندرية', 'مخزن أسيوط']
 
 export default function ProductsPage() {
   const [products, setProducts] = useState<Product[]>(sampleProducts)
   const [searchTerm, setSearchTerm] = useState('')
   const [filterCategory, setFilterCategory] = useState('all')
   const [filterBrand, setFilterBrand] = useState('all')
-  const [showAddModal, setShowAddModal] = useState(false)
-  const [editingProduct, setEditingProduct] = useState<Product | null>(null)
+  const [, setShowAddModal] = useState(false)
+  const [, setEditingProduct] = useState<Product | null>(null)
   
-  const [formData, setFormData] = useState({
+  const [, setFormData] = useState({
     name: '',
     customerName: '',
     category: '',
@@ -71,57 +69,8 @@ export default function ProductsPage() {
     warehouse: ''
   })
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name, value } = e.target
-    setFormData(prev => ({ ...prev, [name]: value }))
-  }
 
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      const files = Array.from(e.target.files).map(file => URL.createObjectURL(file))
-      setFormData(prev => ({ ...prev, images: [...prev.images, ...files] }))
-    }
-  }
 
-  const removeImage = (index: number) => {
-    setFormData(prev => ({
-      ...prev,
-      images: prev.images.filter((_, i) => i !== index)
-    }))
-  }
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    if (editingProduct) {
-      setProducts(products.map(p => 
-        p.id === editingProduct.id ? { ...formData, id: editingProduct.id } : p
-      ))
-    } else {
-      const newProduct = {
-        ...formData,
-        id: Math.max(...products.map(p => p.id), 0) + 1
-      }
-      setProducts([...products, newProduct])
-    }
-    setShowAddModal(false)
-    setEditingProduct(null)
-    resetForm()
-  }
-
-  const resetForm = () => {
-    setFormData({
-      name: '',
-      customerName: '',
-      category: '',
-      brand: '',
-      dosage: '',
-      concentration: '',
-      quantity: 0,
-      price: 0,
-      images: [],
-      warehouse: ''
-    })
-  }
 
   const handleEdit = (product: Product) => {
     setEditingProduct(product)
